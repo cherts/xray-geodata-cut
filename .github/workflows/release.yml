@@ -13,8 +13,6 @@ jobs:
     container: golang:1.26.1
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
       - name: Set Git config
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Set up revive
@@ -23,6 +21,8 @@ jobs:
       - name: Set up gosec
         run: |
           curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOROOT)/bin v2.23.0
+      - name: Checkout code
+        uses: actions/checkout@v6
       - name: Check code modernization
         run: make modernize-check
       - name: Run tests
