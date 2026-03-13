@@ -2,6 +2,7 @@ package asn
 
 import (
 	"fmt"
+	"math"
 	"net/netip"
 
 	"github.com/xtls/xray-core/app/router"
@@ -27,9 +28,13 @@ func BuildGeoIp(asn []int32, trimIpv6 bool) (*router.GeoIPList, error) {
 			if e2 != nil {
 				return nil, e2
 			}
+			bits := ip.Bits()
+			if bits < 0 || bits > math.MaxUint32 {
+				return nil, fmt.Errorf("invalid prefix bits: %d", bits)
+			}
 			entry.Cidr = append(entry.Cidr, &router.CIDR{
 				Ip:     b,
-				Prefix: uint32(ip.Bits()),
+				Prefix: uint32(bits),
 			})
 		}
 		if !trimIpv6 {
@@ -42,9 +47,13 @@ func BuildGeoIp(asn []int32, trimIpv6 bool) (*router.GeoIPList, error) {
 				if e2 != nil {
 					return nil, e2
 				}
+				bits := ip.Bits()
+				if bits < 0 || bits > math.MaxUint32 {
+					return nil, fmt.Errorf("invalid prefix bits: %d", bits)
+				}
 				entry.Cidr = append(entry.Cidr, &router.CIDR{
 					Ip:     b,
-					Prefix: uint32(ip.Bits()),
+					Prefix: uint32(bits),
 				})
 			}
 		}

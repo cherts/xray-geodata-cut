@@ -1,0 +1,38 @@
+---
+name: Default
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "asn/**"
+      - "geoip/**"
+      - "geosite/**"
+      - "main.go"
+      - "Makefile"
+      - "go.mod"
+      - "go.sum"
+  pull_request:
+    paths:
+      - "asn/**"
+      - "geoip/**"
+      - "geosite/**"
+      - "main.go"
+      - "Makefile"
+      - "go.mod"
+      - "go.sum"
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    container: golang:1.26.1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set Git config
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Check code modernization
+        run: make modernize-check
+      - name: Run tests
+        run: make test

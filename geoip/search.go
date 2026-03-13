@@ -9,13 +9,12 @@ func Search(gin *router.GeoIPList, addr string) []string {
 	var result []string
 	addrParsed := net.ParseAddress(addr)
 
-	var container router.GeoIPMatcherContainer
 	for _, x := range gin.Entry {
-		m, err := container.Add(x)
+		matcher, err := router.BuildOptimizedGeoIPMatcher(x)
 		if err != nil {
 			return result
 		}
-		if m.Match(addrParsed.IP()) {
+		if matcher.Match(addrParsed.IP()) {
 			result = append(result, x.CountryCode)
 		}
 	}
