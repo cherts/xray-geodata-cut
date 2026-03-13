@@ -8,7 +8,6 @@ builds:
   - binary: xray-geodata-cut
     main: ./
     goarch:
-      - '386'
       - amd64
       - arm64
       - arm
@@ -17,8 +16,6 @@ builds:
       - windows
       - darwin
     ignore:
-      - goarch: '386'
-        goos: linux
       - goarch: arm
         goos: linux
       - goarch: arm64
