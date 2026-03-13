@@ -19,7 +19,7 @@ clean: ## Clean
 	rm -f ./${APPNAME}
 
 go-update: ## Update go mod
-	go mod tidy -compat=1.25
+	go mod tidy -compat=1.26
 	go get -u ./
 	go mod download
 	go get -u ./
