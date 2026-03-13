@@ -18,6 +18,10 @@ builds:
       - darwin
     ignore:
       - goarch: arm
+        goos: linux
+      - goarch: arm64
+        goos: linux
+      - goarch: arm
         goos: windows
       - goarch: arm64
         goos: windows
