@@ -16,11 +16,11 @@ builds:
       - linux
       - windows
       - darwin
-    #ignore:
-    #  - goarch: arm
-    #    goos: windows
-    #  - goarch: arm64
-    #    goos: windows
+    ignore:
+      - goarch: arm
+        goos: windows
+      - goarch: arm64
+        goos: windows
     env:
       - CGO_ENABLED=0
     ldflags:
