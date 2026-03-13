@@ -1,7 +1,10 @@
 package geoip
 
 import (
+	"fmt"
+	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/xtls/xray-core/app/router"
@@ -10,7 +13,19 @@ import (
 )
 
 func LoadGeoIP(fn string) (*router.GeoIPList, error) {
-	geoIPBytes, err1 := os.ReadFile(fn)
+	if filepath.IsAbs(fn) || strings.Contains(fn, "..") {
+		return nil, fmt.Errorf("invalid file path")
+	}
+	root, err := os.OpenRoot(".")
+	if err != nil {
+		return nil, err
+	}
+	file, err := root.Open(fn)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	geoIPBytes, err1 := io.ReadAll(file)
 	if err1 != nil {
 		return nil, err1
 	}
@@ -72,5 +87,5 @@ func SaveGeoIP(in *router.GeoIPList, fn string) error {
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(fn, b, 0644)
+	return os.WriteFile(fn, b, 0600)
 }

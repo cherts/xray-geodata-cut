@@ -1,0 +1,56 @@
+project_name: xray-geodata-cut
+
+before:
+  hooks:
+    - make dep
+
+builds:
+  - binary: xray-geodata-cut
+    main: ./
+    goarch:
+      - '386'
+      - amd64
+      - arm64
+      - arm
+    goos:
+      - linux
+      - windows
+      - darwin
+    #ignore:
+    #  - goarch: arm
+    #    goos: windows
+    #  - goarch: arm64
+    #    goos: windows
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -a
+
+archives:
+  - builds: [xray-geodata-cut]
+    builds_info:
+      group: root
+      owner: root
+    wrap_in_directory: false
+    files:
+      - README.md
+    name_template: >-
+      {{- .Binary }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end -}}
+
+changelog:
+  sort: asc
+
+checksum:
+  name_template: 'checksums.txt'
+
+nfpms:
+  - vendor: xray-geodata-cut
+    description: xray-geodata-cut - Cut unneeded data from geoip.dat or geosite.dat, or build geoip.dat from ASNs.
+    formats: []
+    bindir: /usr/sbin

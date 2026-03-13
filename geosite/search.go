@@ -10,6 +10,9 @@ func Search(gin *router.GeoSiteList, domain string) []string {
 	for _, x := range gin.Entry {
 		rootMatcher := &strmatcher.MatcherGroup{}
 		for _, y := range x.Domain {
+			if y.Type < 0 || y.Type > 255 {
+				return result
+			}
 			domainType := strmatcher.Type(y.Type)
 			matcher, err := domainType.New(y.Value)
 			if err != nil {

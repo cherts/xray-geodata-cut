@@ -1,0 +1,44 @@
+---
+name: Default
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "asn/**"
+      - "geoip/**"
+      - "geosite/**"
+      - "main.go"
+      - "Makefile"
+      - "go.mod"
+      - "go.sum"
+  pull_request:
+    paths:
+      - "asn/**"
+      - "geoip/**"
+      - "geosite/**"
+      - "main.go"
+      - "Makefile"
+      - "go.mod"
+      - "go.sum"
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    container: golang:1.26.1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+      - name: Set Git config
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Set up revive
+        run: |
+          curl -s -L https://github.com/mgechev/revive/releases/download/v1.14.0/revive_linux_amd64.tar.gz | tar xzf - -C $(go env GOROOT)/bin revive
+      - name: Set up gosec
+        run: |
+          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOROOT)/bin v2.23.0
+      - name: Check code modernization
+        run: make modernize-check
+      - name: Run tests
+        run: make test

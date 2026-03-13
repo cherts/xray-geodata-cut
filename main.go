@@ -6,8 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"google.golang.org/protobuf/proto"
-
 	"github.com/yichya/xray-geodata-cut/asn"
 	"github.com/yichya/xray-geodata-cut/geoip"
 	"github.com/yichya/xray-geodata-cut/geosite"
@@ -24,15 +22,15 @@ func main() {
 
 	flag.Parse()
 	if ft == nil {
-		ft = proto.String("")
+		ft = new("")
 	}
 	switch *ft {
 	case "asn":
 		{
 			var asnList []int32
 			if in != nil {
-				for _, x := range strings.Split(*in, ",") {
-					if v, err := strconv.ParseInt(x, 10, 64); err != nil {
+				for x := range strings.SplitSeq(*in, ",") {
+					if v, err := strconv.ParseInt(x, 10, 32); err != nil {
 						panic(err)
 					} else {
 						asnList = append(asnList, int32(v))
