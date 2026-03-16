@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net"
 	"strconv"
 	"strings"
 
@@ -23,6 +24,13 @@ func main() {
 	flag.Parse()
 	if ft == nil {
 		ft = new("")
+	}
+	if *ft == "geoip" && *search != "" {
+		if net.ParseIP(*search) == nil {
+			fmt.Println("Error: for -type geoip, -search must be a valid IP address")
+			flag.Usage()
+			return
+		}
 	}
 	switch *ft {
 	case "asn":
@@ -60,6 +68,10 @@ func main() {
 						}
 					}
 				} else {
+					if *out == "" {
+						flag.Usage()
+						return
+					}
 					if data, err := asn.BuildGeoIp(asnList, *trimipv6); err != nil {
 						panic(err)
 					} else {
@@ -85,6 +97,10 @@ func main() {
 					fmt.Println(x)
 				}
 			} else {
+				if *out == "" {
+					flag.Usage()
+					return
+				}
 				gout := geoip.CutGeoIPCodes(gin, strings.Split(*keep, ","), *trimipv6)
 				if err = geoip.SaveGeoIP(gout, *out); err != nil {
 					panic(err)
@@ -105,6 +121,10 @@ func main() {
 					fmt.Println(x)
 				}
 			} else {
+				if *out == "" {
+					flag.Usage()
+					return
+				}
 				gout := geosite.CutGeoSiteCodes(gin, strings.Split(*keep, ","))
 				if err = geosite.SaveGeoSite(gout, *out); err != nil {
 					panic(err)
