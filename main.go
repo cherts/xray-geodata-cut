@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"net"
+	"os"
 	"strconv"
 	"strings"
 
@@ -32,6 +33,13 @@ func main() {
 			return
 		}
 	}
+	if *ft == "asn" && *search != "" {
+		if net.ParseIP(*search) == nil {
+			fmt.Println("Error: for -type asn, -search must be a valid IP address")
+			flag.Usage()
+			return
+		}
+	}
 	switch *ft {
 	case "asn":
 		{
@@ -49,11 +57,11 @@ func main() {
 						if resp, err := asn.GetAsnData(x); err != nil {
 							panic(err)
 						} else {
-							for _, y := range resp.Subnets.Ipv4 {
+							for _, y := range resp.Prefixes.Ipv4 {
 								fmt.Printf("AS%d %s\n", x, y)
 							}
 							if !*trimipv6 {
-								for _, y := range resp.Subnets.Ipv6 {
+								for _, y := range resp.Prefixes.Ipv6 {
 									fmt.Printf("AS%d %s\n", x, y)
 								}
 							}
@@ -86,6 +94,10 @@ func main() {
 		}
 	case "geoip":
 		{
+			if _, err := os.Stat(*in); os.IsNotExist(err) {
+				fmt.Println("Error: input file does not exist")
+				return
+			}
 			gin, err := geoip.LoadGeoIP(*in)
 			if err != nil {
 				panic(err)
@@ -110,6 +122,10 @@ func main() {
 		}
 	case "geosite":
 		{
+			if _, err := os.Stat(*in); os.IsNotExist(err) {
+				fmt.Println("Error: input file does not exist")
+				return
+			}
 			gin, err := geosite.LoadGeoSite(*in)
 			if err != nil {
 				panic(err)
