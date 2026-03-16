@@ -2,7 +2,30 @@
 
 Cut unneeded data from geoip.dat or geosite.dat, or build geoip.dat from ASNs
 
+### Quick start
+
+Download the archive from [releases](https://github.com/cherts/xray-geodata-cut/releases). Unpack the archive.
+
+For Linux:
+```bash
+curl -s -L https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.1/xray-geodata-cut_1.0.1_linux_$(uname -m).tar.gz -o - | tar xzf - -C /tmp && \
+mv /tmp/xray-geodata-cut /usr/sbin
 ```
+
+For macOS (install to /opt):
+```bash
+wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.1/xray-geodata-cut_1.0.1_darwin_$(uname -m).tar.gz | tar xzf - -C /tmp && \
+sudo mv /tmp/xray-geodata-cut /opt
+```
+
+For Windows (install to C:\Windows):
+```bash
+curl -s -L https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.1/xray-geodata-cut_1.0.1_windows_x86_64.tar.gz -o - | tar xzf - -C "C:\Temp" && \
+mv "C:\Temp\xray-geodata-cut.exe" "C:\Windows\"
+```
+
+Usage options:
+```bash
 Usage of xray-geodata-cut:
   -in string
         Path to GeoData file / ASNs split by comma
@@ -25,30 +48,37 @@ ASN information comes from [https://github.com/ipverse/asn-ip/](https://github.c
 
 Examples for search: 
 
-```
-sh-5.1$ go run . -type asn -in 24429,4134 -search 106.124.1.2
+```bash
+xray-geodata-cut -type asn -in 24429,4134 -search 106.124.1.2
 AS4134
-sh-5.1$ go run . -in /usr/local/share/xray/geoip.dat -type geoip -search 114.114.114.114
+
+xray-geodata-cut -in /usr/local/share/xray/geoip.dat -type geoip -search 114.114.114.114
 CN
-sh-5.1$ go run . -in /usr/local/share/xray/geoip.dat -type geoip -search 192.0.2.1
+
+xray-geodata-cut -in /usr/local/share/xray/geoip.dat -type geoip -search 192.0.2.1
 PRIVATE
-sh-5.1$ go run . -in /usr/local/share/xray/geoip.dat -type geoip -search 127.0.0.1
+
+xray-geodata-cut -in /usr/local/share/xray/geoip.dat -type geoip -search 127.0.0.1
 PRIVATE
 TEST
-sh-5.1$ go run . -in /usr/local/share/xray/geosite.dat -type geosite -search bilibili.com
+
+xray-geodata-cut -in /usr/local/share/xray/geosite.dat -type geosite -search bilibili.com
 BILIBILI
 CN
 GEOLOCATION-CN
-sh-5.1$ go run . -in /usr/local/share/xray/geosite.dat -type geosite -search baidu.com
+
+xray-geodata-cut -in /usr/local/share/xray/geosite.dat -type geosite -search baidu.com
 BAIDU
 CN
 GEOLOCATION-CN
-sh-5.1$ go run . -in /usr/local/share/xray/geosite.dat -type geosite -search youtube.com
+
+xray-geodata-cut -in /usr/local/share/xray/geosite.dat -type geosite -search youtube.com
 CATEGORY-COMPANIES
 GEOLOCATION-!CN
 GOOGLE
 YOUTUBE
-sh-5.1$ go run . -in /usr/local/share/xray/geosite.dat -type geosite -search www.netflix.com
+
+xray-geodata-cut -in /usr/local/share/xray/geosite.dat -type geosite -search www.netflix.com
 CATEGORY-ENTERTAINMENT
 GEOLOCATION-!CN
 NETFLIX
