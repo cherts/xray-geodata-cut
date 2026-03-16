@@ -19,26 +19,8 @@ func BuildGeoIp(asn []int32, trimIpv6 bool) (*router.GeoIPList, error) {
 			CountryCode: fmt.Sprintf("AS%d", x),
 			Cidr:        make([]*router.CIDR, 0),
 		}
-		for _, y := range data.Subnets.Ipv4 {
-			ip, e1 := netip.ParsePrefix(y)
-			if e1 != nil {
-				return nil, e1
-			}
-			b, e2 := ip.Addr().MarshalBinary()
-			if e2 != nil {
-				return nil, e2
-			}
-			bits := ip.Bits()
-			if bits < 0 || bits > math.MaxUint32 {
-				return nil, fmt.Errorf("invalid prefix bits: %d", bits)
-			}
-			entry.Cidr = append(entry.Cidr, &router.CIDR{
-				Ip:     b,
-				Prefix: uint32(bits),
-			})
-		}
-		if !trimIpv6 {
-			for _, y := range data.Subnets.Ipv6 {
+		if data.Prefixes != nil && data.Prefixes.Ipv4 != nil {
+			for _, y := range data.Prefixes.Ipv4 {
 				ip, e1 := netip.ParsePrefix(y)
 				if e1 != nil {
 					return nil, e1
@@ -55,6 +37,28 @@ func BuildGeoIp(asn []int32, trimIpv6 bool) (*router.GeoIPList, error) {
 					Ip:     b,
 					Prefix: uint32(bits),
 				})
+			}
+		}
+		if !trimIpv6 {
+			if data.Prefixes != nil && data.Prefixes.Ipv6 != nil {
+				for _, y := range data.Prefixes.Ipv6 {
+					ip, e1 := netip.ParsePrefix(y)
+					if e1 != nil {
+						return nil, e1
+					}
+					b, e2 := ip.Addr().MarshalBinary()
+					if e2 != nil {
+						return nil, e2
+					}
+					bits := ip.Bits()
+					if bits < 0 || bits > math.MaxUint32 {
+						return nil, fmt.Errorf("invalid prefix bits: %d", bits)
+					}
+					entry.Cidr = append(entry.Cidr, &router.CIDR{
+						Ip:     b,
+						Prefix: uint32(bits),
+					})
+				}
 			}
 		}
 		result.Entry = append(result.Entry, entry)

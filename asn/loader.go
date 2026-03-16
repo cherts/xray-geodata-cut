@@ -7,20 +7,24 @@ import (
 	"net/http"
 )
 
-type Subnets struct {
+type Metadata struct {
+	Handle      string `json:"handle"`
+	Description string `json:"description"`
+}
+
+type Prefixes struct {
 	Ipv4 []string `json:"ipv4"`
 	Ipv6 []string `json:"ipv6"`
 }
 
 type AsnData struct {
-	Asn         int32    `json:"asn"`
-	Handle      string   `json:"handle"`
-	Description string   `json:"description"`
-	Subnets     *Subnets `json:"subnets"`
+	Asn      int32     `json:"asn"`
+	Metadata *Metadata `json:"metadata"`
+	Prefixes *Prefixes `json:"prefixes"`
 }
 
 func GetAsnData(asn int32) (*AsnData, error) {
-	if resp, err := http.Get(fmt.Sprintf("https://raw.githubusercontent.com/ipverse/asn-ip/master/as/%d/aggregated.json", asn)); err != nil {
+	if resp, err := http.Get(fmt.Sprintf("https://raw.githubusercontent.com/ipverse/as-ip-blocks/master/as/%d/aggregated.json", asn)); err != nil {
 		return nil, err
 	} else {
 		var respBytes []byte
