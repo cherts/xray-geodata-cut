@@ -8,19 +8,19 @@ Download the archive from [releases](https://github.com/cherts/xray-geodata-cut/
 
 For Linux:
 ```bash
-wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.1/xray-geodata-cut_1.0.1_linux_$(uname -m).tar.gz | tar xzf - -C /tmp && \
+wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.2/xray-geodata-cut_1.0.2_linux_$(uname -m).tar.gz | tar xzf - -C /tmp && \
 mv /tmp/xray-geodata-cut /usr/sbin
 ```
 
 For macOS (install to /opt):
 ```bash
-wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.1/xray-geodata-cut_1.0.1_darwin_$(uname -m).tar.gz | tar xzf - -C /tmp && \
+wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.2/xray-geodata-cut_1.0.2_darwin_$(uname -m).tar.gz | tar xzf - -C /tmp && \
 sudo mv /tmp/xray-geodata-cut /opt
 ```
 
 For Windows (install to C:\Windows):
 ```bash
-wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.1/xray-geodata-cut_1.0.1_windows_x86_64.tar.gz | tar xzf - -C "C:\Temp" && \
+wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.2/xray-geodata-cut_1.0.2_windows_x86_64.tar.gz | tar xzf - -C "C:\Temp" && \
 mv "C:\Temp\xray-geodata-cut.exe" "C:\Windows\"
 ```
 
@@ -44,7 +44,7 @@ Usage of xray-geodata-cut:
 
 ```
 
-ASN information comes from [https://github.com/ipverse/asn-ip/](https://github.com/ipverse/asn-ip/)
+ASN information comes from [https://github.com/ipverse/as-ip-blocks/](https://github.com/ipverse/as-ip-blocks/)
 
 Examples for search: 
 
