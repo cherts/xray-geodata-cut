@@ -18,10 +18,10 @@ wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.2/xr
 sudo mv /tmp/xray-geodata-cut /opt
 ```
 
-For Windows (install to C:\Windows):
+For Windows (install to C:\Windows, run as Administrator):
 ```bash
-wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.2/xray-geodata-cut_1.0.2_windows_x86_64.tar.gz | tar xzf - -C "C:\Temp" && \
-mv "C:\Temp\xray-geodata-cut.exe" "C:\Windows\"
+wget -qO- https://github.com/cherts/xray-geodata-cut/releases/download/v1.0.2/xray-geodata-cut_1.0.2_windows_x86_64.tar.gz | tar xzf - -C "C:\Windows\Temp" && \
+move "C:\Windows\Temp\xray-geodata-cut.exe" "C:\Windows\"
 ```
 
 Usage options:
