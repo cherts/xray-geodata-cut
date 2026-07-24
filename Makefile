@@ -66,4 +66,4 @@ govulncheck: ## Run go vulnerability check
 	go env -w GOFLAGS="-buildvcs=false"
 	$(GOVULNCHECK_INSTALL_CMD)
 	$(YQ_INSTALL_CMD)
-	$(GOVULNCHECK_RUN_CMD) --config .govulncheck-ignore.yaml --verbose
+	./$(GOVULNCHECK_RUN_CMD) --config .govulncheck-ignore.yaml --verbose
