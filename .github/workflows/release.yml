@@ -7,10 +7,14 @@ on:
     tags:
       - "v1.*"
 
+permissions:
+  contents: write      # Required to create the GitHub Release
+  id-token: write      # Required for Cosign keyless signing
+
 jobs:
   test:
     runs-on: ubuntu-24.04
-    container: golang:1.26.1
+    container: golang:1.26.5
 
     steps:
       - name: Set Git config
@@ -20,11 +24,13 @@ jobs:
           curl -s -L https://github.com/mgechev/revive/releases/download/v1.15.0/revive_linux_amd64.tar.gz | tar xzf - -C $(go env GOROOT)/bin revive
       - name: Set up gosec
         run: |
-          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOROOT)/bin v2.24.7
+          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOROOT)/bin v2.28.0
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Check code modernization
         run: make modernize-check
+      - name: Check code govulncheck
+        run: make govulncheck
       - name: Run tests
         run: make test
 
@@ -33,17 +39,20 @@ jobs:
     needs: test
     steps:
       - name: Run checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Run setup Go
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
-          go-version: 1.26.1
+          go-version-file: go.mod
+          check-latest: true
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v4.1.2
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v7
         with:
           version: '~> v2'
-          args: release --clean
+          args: release --clean --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
