@@ -36,7 +36,7 @@ Temporary Items
 # Debug
 debug_run.*
 # Bin
-bin/*
+dist/*
 # Cert
 *.pem
 *.key
