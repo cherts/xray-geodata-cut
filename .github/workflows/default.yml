@@ -21,6 +21,11 @@ jobs:
     steps:
       - name: Set Git config
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - name: Set up dependencies
+        run: |
+          apt-get update
+          apt-get -y upgrade
+          apt-get install jq wget curl -y
       - name: Set up revive
         run: |
           curl -s -L https://github.com/mgechev/revive/releases/download/v1.15.0/revive_linux_amd64.tar.gz | tar xzf - -C $(go env GOROOT)/bin revive
