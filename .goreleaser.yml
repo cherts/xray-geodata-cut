@@ -1,3 +1,5 @@
+version: 2
+
 project_name: xray-geodata-cut
 
 before:
@@ -5,7 +7,8 @@ before:
     - make dep
 
 builds:
-  - binary: xray-geodata-cut
+  - id: xray-geodata-cut
+    binary: xray-geodata-cut
     main: ./
     goarch:
       - amd64
@@ -30,7 +33,12 @@ builds:
       - -a
 
 archives:
-  - builds: [xray-geodata-cut]
+  - id: xray-geodata-cut
+    ids: [xray-geodata-cut]
+    formats: ["tar.gz"]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
     builds_info:
       group: root
       owner: root
@@ -48,6 +56,18 @@ archives:
 
 changelog:
   sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "Merge pull request"
+      - "Merge branch"
+
+source:
+  enabled: true
+  name_template: "{{ .ProjectName }}-{{ .Version }}"
+  format: tar.gz
 
 checksum:
   name_template: 'checksums.txt'

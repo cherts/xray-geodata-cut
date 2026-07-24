@@ -16,7 +16,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-24.04
-    container: golang:1.26.1
+    container: golang:1.26.5
 
     steps:
       - name: Set Git config
@@ -26,10 +26,12 @@ jobs:
           curl -s -L https://github.com/mgechev/revive/releases/download/v1.15.0/revive_linux_amd64.tar.gz | tar xzf - -C $(go env GOROOT)/bin revive
       - name: Set up gosec
         run: |
-          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOROOT)/bin v2.24.7
+          curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $(go env GOROOT)/bin v2.28.0
       - name: Checkout code
         uses: actions/checkout@v6
       - name: Check code modernization
         run: make modernize-check
+      - name: Check code govulncheck
+        run: make govulncheck
       - name: Run tests
         run: make test

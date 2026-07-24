@@ -3,11 +3,15 @@ APPOS = ${GOOS}
 LDFLAGS = -a
 
 MODERNIZE_CMD = go run golang.org/x/tools/go/analysis/passes/modernize/cmd/modernize@latest
+GOVULNCHECK_INSTALL_CMD = go install golang.org/x/vuln/cmd/govulncheck@latest
+YQ_INSTALL_CMD = go install github.com/mikefarah/yq/v4@latest
+GOVULNCHECK_RUN_CMD = govulncheck-wrapper.sh
 
 .PHONY: help \
 		clean lint test race \
 		build go-update \
-		modernize modernize-fix modernize-check
+		modernize modernize-fix modernize-check \
+		govulncheck
 
 .DEFAULT_GOAL := help
 
@@ -56,3 +60,10 @@ modernize-check: ## Run gopls modernize only check
 	@echo "Checking if code needs modernization..."
 	go env -w GOFLAGS="-buildvcs=false"
 	$(MODERNIZE_CMD) -test ./...
+
+govulncheck: ## Run go vulnerability check
+	@echo "Running go vulnerability check..."
+	go env -w GOFLAGS="-buildvcs=false"
+	$(GOVULNCHECK_INSTALL_CMD)
+	$(YQ_INSTALL_CMD)
+	$(GOVULNCHECK_RUN_CMD) --config .govulncheck-ignore.yaml --verbose
