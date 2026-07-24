@@ -74,6 +74,7 @@ checksum:
 
 nfpms:
   - vendor: xray-geodata-cut
+    maintainer: "Mikhail Grigorev <sleuthhound@gmail.com>"
     description: xray-geodata-cut - Cut unneeded data from geoip.dat or geosite.dat, or build geoip.dat from ASNs.
     formats: []
     bindir: /usr/sbin
